@@ -2,6 +2,8 @@
 
 Offerte dei volantini dell'**Ipercoop Cesena Lungo Savio** (Coop Alleanza 3.0, negozio 0315) filtrate sui prodotti che compro, con storico prezzi, calcolo dello sconto soci e studenti, valori nutrizionali Open Food Facts e notifica macOS automatica.
 
+🌐 **Demo live**: [luglistudio.github.io/coop-cesena](https://luglistudio.github.io/coop-cesena/)
+
 ![Dashboard Offerte Coop Cesena](assets/dashboard.png)
 
 ## Funzionalità principali
