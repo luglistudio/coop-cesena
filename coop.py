@@ -155,6 +155,8 @@ CREATE TABLE IF NOT EXISTS listino (
 CREATE TABLE IF NOT EXISTS listino_prezzi (
   sku TEXT, date TEXT, prezzo REAL, PRIMARY KEY (sku, date)
 );
+-- names of the easycoop sub-categories (listino.sottocategoria)
+CREATE TABLE IF NOT EXISTS categorie (id TEXT PRIMARY KEY, nome TEXT);
 -- Open Food Facts health data by EAN (nutriscore a-e, nova 1-4 = degree of processing)
 CREATE TABLE IF NOT EXISTS qualita (
   ean TEXT PRIMARY KEY, trovato INTEGER, nutriscore TEXT, nova INTEGER, additivi INTEGER, bio INTEGER,
@@ -277,6 +279,23 @@ def fix_quantity(name, qty, unit):
     return qty
 
 
+def categorie_nomi():
+    """Names of the sub-categories, to label "same kind" comparisons in the page."""
+    db = connect()
+    ids = [i for (i,) in db.execute("SELECT DISTINCT sottocategoria FROM listino WHERE sottocategoria <> ''")]
+    known = {i for (i,) in db.execute("SELECT id FROM categorie")}
+    todo = [i for i in ids if i not in known]
+    if not todo:
+        return
+    found = []
+    for i in range(0, len(todo), 15):   # the API answers at most 20 categories per request
+        ids_gql = ", ".join(f'"{c}"' for c in todo[i:i + 15])
+        found += gql(f"{{ categoryList(filters: {{ids: {{in: [{ids_gql}]}}}}) {{ id name }} }}")["categoryList"]
+    with db:
+        db.executemany("INSERT OR REPLACE INTO categorie VALUES (?,?)", [(str(c["id"]), c["name"].strip()) for c in found])
+    print(f"Nomi sottocategorie: {len(found)}/{len(todo)}")
+
+
 def listino_stale():
     last = connect().execute("SELECT MAX(last_seen) FROM listino").fetchone()[0]
     return not last or date.fromisoformat(last) <= date.today() - timedelta(days=LISTINO_DAYS)
@@ -335,6 +354,7 @@ def listino():
             if last.get(r["sku"]) != r["prezzo"]:
                 db.execute("INSERT OR REPLACE INTO listino_prezzi VALUES (?,?,?)", (r["sku"], today, r["prezzo"]))
     print(f"Fatto: {len(picked)} prodotti nel listino.")
+    categorie_nomi()
 
 
 def qualita():
@@ -445,7 +465,8 @@ def report():
     first = db.execute("SELECT MIN(date) FROM runs").fetchone()[0]
     finished = db.execute("SELECT finished FROM runs WHERE date = ?", (last_run,)).fetchone()[0]
     meta = {"updated": last_run, "updated_at": (finished or "")[11:16], "today": date.today().isoformat(),
-            "since": first, "groups": groups, "listino": last_listino}
+            "since": first, "groups": groups, "listino": last_listino,
+            "categorie": dict(db.execute("SELECT id, nome FROM categorie"))}
     payload = json.dumps({"meta": meta, "rows": rows, "listino": listino_rows},
                          ensure_ascii=False, separators=(",", ":"))
     html = TEMPLATE_PATH.read_text(encoding="utf-8").replace("/*__DATA__*/null", payload.replace("</", "<\\/"))

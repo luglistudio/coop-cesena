@@ -57,6 +57,18 @@
   .sum > div { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
   .sum .tot { font-size: 18px; font-weight: 700; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 8px; }
   .good { color: var(--good); }
+  .cmp { margin-top: 12px; }
+  .cmp-scope { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 4px; }
+  .lnk.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .cmp-sum { font-size: 13px; line-height: 1.6; margin: 6px 0; }
+  .cmp-sum .warn { color: var(--accent); font-weight: 600; }
+  .cmp-row { display: grid; grid-template-columns: 30px 1fr auto; gap: 8px; padding: 6px 6px; border-bottom: 1px solid var(--line);
+    align-items: start; font-size: 13px; }
+  .cmp-row.cur { background: color-mix(in srgb, var(--accent) 14%, transparent); border-radius: 6px; }
+  .cmp-row .rk { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .cmp-row .pr { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .cmp-row .act { margin-top: 4px; }
+  .cmp-more { margin: 8px 0 0; }
   .ref { font-size: 12px; margin-top: 3px; }
   .ns { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 18px; padding: 0 5px;
     border-radius: 4px; font: 700 11px/1 -apple-system, sans-serif; color: #fff; margin: 3px 4px 0 0; vertical-align: middle; }
@@ -394,14 +406,17 @@ function listinoHtml(x, socio) {
 
 // every product of the groups: the online catalogue, with the Cesena offer in place of the
 // regular price when there is one, plus the Cesena offers that have no online counterpart
-function renderAll(socio, words, grp, sort) {
+function buildEntries() {
   const live = rows.filter(r => r.state !== "exp");
   const offerOf = new Map();
   for (const r of live) if (r.match && (!offerOf.has(r.match) || r.state === "now")) offerOf.set(r.match, r);
-  const entries = [
+  return [
     ...L.map(x => offerOf.has(x) ? { r: offerOf.get(x), g: x.gruppo, key: x.key } : { x, g: x.gruppo, key: x.key }),
     ...live.filter(r => !r.match).map(r => ({ r, g: r.gruppo, key: r.key })),
-  ].filter(e => (!grp || e.g === grp) && (!$("onlyOff").checked || e.r) && words.every(w => e.key.includes(w))
+  ];
+}
+function renderAll(socio, words, grp, sort) {
+  const entries = buildEntries().filter(e => (!grp || e.g === grp) && (!$("onlyOff").checked || e.r) && words.every(w => e.key.includes(w))
            && healthOk(e.r ? e.r.q : e.x.q));
   const unit = e => e.r ? unitPay(e.r, socio) : lu(e.x, socio);
   const val = e => e.r ? (sort === "p" ? pay(e.r, socio) : sort === "d" ? -(e.r.sconto || 0) : unitPay(e.r, socio))
@@ -451,6 +466,82 @@ function render() {
     `<h2>${esc(g)} <small>${l.length}</small></h2><div class="list">${l.map(r => itemHtml(r, socio)).join("")}</div>`).join("");
 }
 
+
+// ---- confronto con la categoria: classifica per €/kg-litro di tutti i prodotti simili, in offerta o no ----
+const CAT = m.categorie || {};
+function cmpContext(id) {
+  const cur = id[0] === "o" ? rows[+id.slice(1)] : L[+id.slice(1)];
+  const base = id[0] === "o" ? cur.match : cur;
+  const sub = base && base.sottocategoria ? base.sottocategoria : "";
+  return { cur, base, sub, uk: cur.uk || (base && base.uk) || "", g: cur.gruppo };
+}
+function cmpPool(id, scope, socio) {
+  const c = cmpContext(id);
+  const isCur = e => (e.r && e.r === c.cur) || (e.x && e.x === c.cur) ||
+    (c.base && (e.x === c.base || (e.r && e.r.match === c.base)));
+  const subOf = e => (e.r ? e.r.match : e.x)?.sottocategoria || "";
+  const unitOf = e => e.r ? unitPay(e.r, socio) : lu(e.x, socio);
+  const ukOf = e => e.r ? (e.r.uk || (e.r.match && e.r.match.uk) || "") : e.x.uk;
+  const all = buildEntries().filter(e => e.g === c.g && ukOf(e) === c.uk);
+  const ranked = all.filter(e => unitOf(e) != null && (scope !== "tipo" || (c.sub && subOf(e) === c.sub)))
+    .map(e => ({ e, unit: unitOf(e), cur: isCur(e) }))
+    .sort((a, b) => a.unit - b.unit);
+  const nTipo = c.sub ? all.filter(e => unitOf(e) != null && subOf(e) === c.sub).length : 0;
+  const nGruppo = all.filter(e => unitOf(e) != null).length;
+  return { c, ranked, nTipo, nGruppo, noUnit: all.length - nGruppo };
+}
+function cmpDefaultScope(id) {
+  const p = cmpPool(id, "tipo", $("socio").checked);
+  return p.c.sub && p.nTipo >= 3 ? "tipo" : "gruppo";
+}
+function cmpRow(x, rank, socio) {
+  const e = x.e, r = e.r, base = r ? r.match : e.x;
+  const p = priceOf(e, socio), sk = r ? r.sk : e.x.sk;
+  const name = titleCase(r ? r.nome : e.x.nome);
+  const q = r ? r.q : e.x.q;
+  const off = r ? `<span class="badge b-off">offerta${r.sconto && (!r.soci || socio) ? ` −${r.sconto}%` : ""}</span>` : "";
+  const stud = p.studUnit > 0 ? `<span class="badge b-best">−20% studenti</span>` : "";
+  const meta = [r ? r.marca : e.x.marca, r ? r.formato : ""].filter(Boolean).join(" · ");
+  const uk = r ? (r.uk || (base && base.uk)) : e.x.uk;
+  return `<div class="cmp-row${x.cur ? " cur" : ""}">
+    <span class="rk">${rank}</span>
+    <div><b>${esc(name)}</b>${meta ? ` <span class="meta">${esc(meta)}</span>` : ""}<br>${off}${stud}${qualityHtml(q)}
+      ${actHtml(p, sk)}</div>
+    <div class="pr"><b>${p.paid != null ? eur(p.paid) : ""}</b><div class="meta">${eur(x.unit)}/${unitLabel(uk)}</div></div>
+  </div>`;
+}
+function cmpHtml(id, scope, showAll) {
+  const socio = $("socio").checked, P = cmpPool(id, scope, socio), c = P.c;
+  if (!c.uk) return `<div class="cmp-sum">Per questo prodotto non c'è un prezzo al kg o al litro da confrontare.</div>`;
+  const list = P.ranked, n = list.length, ci = list.findIndex(x => x.cur);
+  const subName = CAT[c.sub] || "stesso tipo";
+  const scopes = `<div class="cmp-scope">` +
+    (c.sub ? `<button class="lnk${scope === "tipo" ? " on" : ""}" data-scope="tipo">Stesso tipo: ${esc(subName)} (${P.nTipo})</button>` : "") +
+    `<button class="lnk${scope === "gruppo" ? " on" : ""}" data-scope="gruppo">Tutto il gruppo: ${esc(c.g)} (${P.nGruppo})</button></div>`;
+  let sum = "";
+  if (ci >= 0) {
+    const cheaper = list.slice(0, ci).filter(x => !x.e.r);       // regular-priced products that beat it
+    const best = list.find(x => !x.cur);
+    sum = ci === 0
+      ? `<div class="cmp-sum">👍 <b>È il più economico</b> di ${n} prodotti al ${unitLabel(c.uk)}.</div>`
+      : `<div class="cmp-sum">Posizione <b>${ci + 1}° su ${n}</b> al ${unitLabel(c.uk)}.` +
+        (cheaper.length ? ` <span class="warn">${cheaper.length} ${cheaper.length === 1 ? "prodotto" : "prodotti"} senza offerta ${cheaper.length === 1 ? "costa" : "costano"} meno</span>.` : "") +
+        (best ? ` Il più economico: <b>${esc(titleCase(best.e.r ? best.e.r.nome : best.e.x.nome))}</b> a ${eur(best.unit)}/${unitLabel(c.uk)}${best.e.r ? " (in offerta)" : ""}.` : "") + `</div>`;
+  } else {
+    sum = `<div class="cmp-sum">Il prodotto non rientra in questo confronto${P.noUnit ? ` (${P.noUnit} prodotti senza prezzo al ${unitLabel(c.uk)} esclusi)` : ""}.</div>`;
+  }
+  const idx = new Set(list.slice(0, 10).map((_, i) => i));
+  if (ci >= 0) idx.add(ci);
+  const shown = showAll ? list.map((_, i) => i) : [...idx].sort((a, b) => a - b);
+  let body = "", last = -1;
+  for (const i of shown) {
+    if (i - last > 1) body += `<div class="cmp-row"><span class="rk">…</span><div class="meta">${i - last - 1} altri</div><span></span></div>`;
+    body += cmpRow(list[i], i + 1, socio);
+    last = i;
+  }
+  if (!showAll && n > shown.length) body += `<div class="cmp-more"><button class="lnk" data-showall>Mostra tutti i ${n}</button></div>`;
+  return scopes + sum + body;
+}
 
 // ---- price history of one product: regular price over time + Cesena offer periods ----
 const DAY = 864e5;
@@ -588,6 +679,7 @@ function detailHtml(id) {
     ${svg || ""}
     ${svg ? `<div class="legend"><span><i style="background:var(--muted)"></i>prezzo normale${t.shelf.length ? " (Cesena)" : t.normal.length ? " (stima online)" : ""}</span><span><i style="background:var(--accent);height:4px"></i>in offerta a Cesena</span><span>tratteggio = giorni futuri (validità volantino)</span></div>` : ""}
     ${statsHtml(t, id, socio)}
+    <div class="cmp" data-id="${id}"><button class="lnk" data-cmp-open>Confronta con la categoria ▾</button><div class="cmp-body"></div></div>
   </div>`;
 }
 
@@ -596,6 +688,19 @@ $("main").addEventListener("click", e => {
   if (add) return toggleCart(add.dataset.add);
   const qb = e.target.closest("[data-qty]");
   if (qb) { cartChange(qb.dataset.sk, +qb.dataset.qty); return render(); }
+  const box = e.target.closest(".cmp");
+  if (box) {
+    const body = box.querySelector(".cmp-body"), fill = () => { body.innerHTML = cmpHtml(box.dataset.id, box.dataset.scope, !!box.dataset.all); };
+    if (e.target.closest("[data-cmp-open]")) {
+      const btn = e.target.closest("[data-cmp-open]");
+      if (body.innerHTML) { body.innerHTML = ""; btn.textContent = "Confronta con la categoria ▾"; }
+      else { box.dataset.scope = cmpDefaultScope(box.dataset.id); box.dataset.all = ""; fill(); btn.textContent = "Nascondi il confronto ▴"; }
+      return;
+    }
+    const sc = e.target.closest("button[data-scope]");   // not the container, which also carries data-scope
+    if (sc) { box.dataset.scope = sc.dataset.scope; box.dataset.all = ""; fill(); return; }
+    if (e.target.closest("[data-showall]")) { box.dataset.all = "1"; fill(); return; }
+  }
   const rm = e.target.closest("[data-rm]");
   if (rm) { cartRemove(rm.dataset.rm); return render(); }
   if (e.target.closest("#svuota")) { if (confirm("Svuotare la lista?")) { cartSet([]); render(); } return; }

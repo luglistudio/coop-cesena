@@ -84,6 +84,14 @@ Il bottone **+ lista** lo mette nella lista della spesa (voce "La mia lista" nel
 prezzo finale, risparmio rispetto allo scaffale e sconto studenti con tetto di 20 € al mese.
 La lista si salva **nel browser di questo Mac** via `localStorage`.
 
+## Confronto con la categoria
+
+Cliccando un prodotto (offerta o no) si apre il grafico; sotto c'è **"Confronta con la categoria"**:
+classifica per €/kg-litro di tutti i prodotti simili, in offerta o no, con il tuo evidenziato.
+Dice in che posizione sei e quanti prodotti **senza offerta** costano meno. Due ambiti: "stesso tipo"
+(sottocategoria easycoop, es. "Pasta di semola") o "tutto il gruppo" (es. Piadine). Si confrontano solo
+prodotti con la stessa unità (kg con kg, litri con litri). Le sottocategorie arrivano dal listino easycoop.
+
 ## Quanto è salutare: Open Food Facts
 
 Per ogni prodotto con codice a barre la pagina mostra **Nutri-Score** (A–E) e **NOVA**
