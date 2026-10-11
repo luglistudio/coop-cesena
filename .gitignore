@@ -1,0 +1,20 @@
+# Database locale e log
+offerte.db
+*.db
+aggiornamento.log
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+
+# macOS / OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/

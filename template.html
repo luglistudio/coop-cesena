@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offerte Coop Cesena</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6a64; --line: #e3e1da;
+    --accent: #c8102e; --good: #1a7f45; --good-bg: #e3f4ea; --promo-bg: #fde8eb; --soon-bg: #e8eefc; --soon: #2a52be;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #151514; --panel: #1f1f1d; --ink: #ecebe6; --muted: #a09e96; --line: #33322f;
+      --accent: #ff5a6e; --good: #5fd08f; --good-bg: #173326; --promo-bg: #3a1b20; --soon-bg: #1c2540; --soon: #8fb0ff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 20px 16px 8px; max-width: 1100px; margin: 0 auto; }
+  h1 { margin: 0; font-size: 22px; letter-spacing: -0.01em; }
+  h1 span { color: var(--accent); }
+  .sub { color: var(--muted); margin-top: 4px; }
+  .controls { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .controls-inner { max-width: 1100px; margin: 0 auto; padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+  input[type=search], select { font: inherit; color: var(--ink); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+  input[type=search] { flex: 1 1 220px; min-width: 0; }
+  label.chk { display: inline-flex; gap: 5px; align-items: center; color: var(--muted); cursor: pointer; white-space: nowrap; }
+  main { max-width: 1100px; margin: 0 auto; padding: 8px 16px 40px; }
+  .count { color: var(--muted); margin: 8px 0; }
+  h2 { font-size: 15px; margin: 22px 0 8px; display: flex; gap: 8px; align-items: baseline; }
+  h2 small { color: var(--muted); font-weight: 400; }
+  .list { background: var(--panel); border-radius: 10px; overflow: hidden; }
+  .item { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--line); align-items: center; }
+  .item:last-child { border-bottom: 0; }
+  .item.expired { opacity: .55; }
+  .item img { width: 56px; height: 56px; object-fit: contain; background: #fff; border-radius: 6px; }
+  .name { font-weight: 600; }
+  .meta { color: var(--muted); font-size: 12px; }
+  .prices { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .price { font-weight: 700; font-size: 17px; }
+  .old { color: var(--muted); text-decoration: line-through; font-size: 12px; margin-right: 4px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; margin: 3px 4px 0 0; }
+  .b-off { background: var(--promo-bg); color: var(--accent); }
+  .b-soon { background: var(--soon-bg); color: var(--soon); }
+  .b-best { background: var(--good-bg); color: var(--good); }
+  .b-soci, .b-exp { background: var(--line); color: var(--muted); }
+  .b-new { background: var(--accent); color: #fff; }
+  .act { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .lnk, .add, .rm, .qty button, #svuota { font: inherit; font-size: 12px; border: 1px solid var(--line); background: var(--panel);
+    color: var(--ink); border-radius: 999px; padding: 3px 10px; cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .add { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .add.on { background: var(--good); border-color: var(--good); color: #fff; }
+  .qty { display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end; }
+  .qty button { padding: 1px 9px; }
+  .sum { background: var(--panel); border-radius: 10px; padding: 14px 16px; margin-top: 14px; }
+  .sum > div { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+  .sum .tot { font-size: 18px; font-weight: 700; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 8px; }
+  .good { color: var(--good); }
+  .ref { font-size: 12px; margin-top: 3px; }
+  .ns { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 18px; padding: 0 5px;
+    border-radius: 4px; font: 700 11px/1 -apple-system, sans-serif; color: #fff; margin: 3px 4px 0 0; vertical-align: middle; }
+  .ns-a { background: #038141; } .ns-b { background: #85bb2f; } .ns-c { background: #fecb02; color: #1d1d1b; }
+  .ns-d { background: #ee8100; } .ns-e { background: #e63e11; }
+  .nova { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; margin: 3px 4px 0 0;
+    border: 1px solid var(--line); color: var(--muted); }
+  .nova-4 { border-color: #e63e11; color: #e63e11; } .nova-1 { border-color: #038141; color: #038141; }
+  .item[data-id] { cursor: pointer; }
+  .item[data-id]:hover { background: color-mix(in srgb, var(--panel) 92%, var(--ink)); }
+  .detail { padding: 6px 12px 14px 80px; border-bottom: 1px solid var(--line); }
+  .detail svg { width: 100%; max-width: 640px; height: auto; display: block; }
+  .detail .legend { font-size: 12px; color: var(--muted); margin: 4px 0; display: flex; gap: 14px; flex-wrap: wrap; }
+  .detail .legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 4px; }
+  .detail .stats { font-size: 13px; line-height: 1.6; }
+  @media (max-width: 600px) { .detail { padding-left: 12px; } }
+  .ref b { font-weight: 600; }
+  .empty { padding: 40px; text-align: center; color: var(--muted); background: var(--panel); border-radius: 10px; }
+  @media (max-width: 600px) {
+    .item { grid-template-columns: 44px 1fr; }
+    .item img { width: 44px; height: 44px; }
+    .prices { grid-column: 2; text-align: left; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Offerte <span>Coop</span> · Ipercoop Cesena Lungo Savio</h1>
+  <div class="sub" id="sub"></div>
+</header>
+<div class="controls"><div class="controls-inner">
+  <select id="view">
+    <option value="all">Tutti i prodotti</option>
+    <option value="new">Offerte nuove</option>
+    <option value="off">Solo offerte a Cesena</option>
+    <option value="lista">🛒 La mia lista (0)</option>
+  </select>
+  <input type="search" id="q" placeholder="Cerca (es. pesto, hamburger)">
+  <select id="grp"><option value="">Tutti i gruppi</option></select>
+  <select id="state">
+    <option value="live">In corso + in arrivo</option>
+    <option value="now">Solo in corso</option>
+    <option value="all">Anche scadute (storico)</option>
+  </select>
+  <select id="sort">
+    <option value="u">€/kg-litro ↑</option>
+    <option value="p">Prezzo ↑</option>
+    <option value="d">Sconto ↓</option>
+    <option value="end">Scadenza più vicina</option>
+    <option value="h">Più sano (Nutri-Score), poi €/kg</option>
+  </select>
+  <select id="health">
+    <option value="">Qualsiasi Nutri-Score</option>
+    <option value="b">Nutri-Score A–B</option>
+    <option value="c">Nutri-Score A–C</option>
+    <option value="nova">Poco lavorati (NOVA 1–2)</option>
+  </select>
+  <label class="chk" id="onlyOffLbl"><input type="checkbox" id="onlyOff"> solo in offerta</label>
+  <label class="chk"><input type="checkbox" id="socio" checked> ho la carta socio</label>
+  <label class="chk" title="−20% sui prodotti a marchio Coop, anche in offerta; max 100 € di spesa al mese"><input type="checkbox" id="stud" checked> sconto studenti −20% Coop</label>
+</div></div>
+<main id="main"></main>
+<script>
+const DATA = /*__DATA__*/null;
+const $ = id => document.getElementById(id);
+const m = DATA.meta, TODAY = m.today;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const eur = v => v == null ? "" : v.toLocaleString("it-IT", { style: "currency", currency: "EUR" });
+const dm = s => s.slice(8, 10) + "/" + s.slice(5, 7);
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const titleCase = s => s.toLowerCase().replace(/(^|[\s'(])\p{L}/gu, c => c.toUpperCase());
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+$("socio").checked = store.get("coop-socio", true);
+$("stud").checked = store.get("coop-stud", true);
+
+const rows = DATA.rows;
+for (const r of rows) {
+  r.key = norm([r.nome, r.formato, r.marca, r.gruppo].join(" "));
+  r.coop = /\bcoop\b/i.test(r.marca + " " + r.nome);
+  r.isNew = r.first_seen === m.updated;
+  r.state = r.valido_a < TODAY ? "exp" : r.valido_da > TODAY ? "soon" : "now";
+}
+
+// online catalogue: regular prices, the yardstick for offers (Cesena pays the same or a bit less)
+const unitKey = u => { u = (u || "").toLowerCase(); return u.startsWith("l") ? "l" : u.startsWith("k") ? "kg" : u; };
+const L = DATA.listino || [];
+const byEan = {};
+for (const x of L) {
+  x.coop = /\bcoop\b/i.test(x.marca + " " + x.nome);
+  x.uk = unitKey(x.unita);
+  x.key = norm([x.nome, x.marca, x.gruppo].join(" "));
+  if (x.ean) byEan[x.ean] = x;
+}
+for (const r of rows) {
+  r.uk = unitKey(r.unita);
+  r.match = r.ean.map(e => byEan[e]).find(Boolean) || null;
+}
+rows.forEach((r, i) => r.id = "o" + i);
+rows.forEach(r => r.sk = "o:" + r.volantino_id + ":" + r.promo_id);
+L.forEach((x, i) => x.id = "l" + i);
+L.forEach(x => x.sk = "l:" + x.sku);
+const studOn = socio => socio && STUD();
+
+// Open Food Facts: q = [nutriscore a-e, nova 1-4, additives count, organic]
+const NOVA_TXT = { 1: "non lavorato", 2: "ingrediente culinario", 3: "trasformato", 4: "ultra-trasformato" };
+function qualityHtml(q) {
+  if (!q) return "";
+  const [ns, nova, add] = q;
+  return (ns ? `<span class="ns ns-${ns}" title="Nutri-Score ${ns.toUpperCase()} (Open Food Facts)">${ns.toUpperCase()}</span>` : "") +
+    (nova ? `<span class="nova nova-${nova}" title="NOVA ${nova}: ${NOVA_TXT[nova]}${add != null ? ` · ${add} additivi` : ""}">NOVA ${nova}</span>` : "");
+}
+const nsRank = q => q && q[0] ? "abcde".indexOf(q[0]) : 9;
+function healthOk(q) {
+  const h = $("health").value;
+  if (!h) return true;
+  if (h === "nova") return !!(q && q[1] && q[1] <= 2);
+  return nsRank(q) <= "abcde".indexOf(h);
+}
+const lp = (x, socio) => x.coop && studOn(socio) ? Math.round(x.prezzo * 80) / 100 : x.prezzo;
+const lu = (x, socio) => x.quantita ? Math.round(lp(x, socio) / x.quantita * 100) / 100 : null;
+const unitLabel = k => ({ kg: "kg", l: "litro" }[k] || k);
+
+// cheapest regular-priced alternative of the same kind (same sub-category if the EAN is known)
+function bestAlternative(r, socio) {
+  const pool = L.filter(x => x !== r.match && x.uk === r.uk && lu(x, socio) != null &&
+    (r.match ? x.sottocategoria === r.match.sottocategoria : x.gruppo === r.gruppo));
+  return pool.reduce((b, x) => !b || lu(x, socio) < lu(b, socio) ? x : b, null);
+}
+
+$("sub").textContent = `Offerte aggiornate il ${dm(m.updated)}${m.updated_at ? " alle " + m.updated_at : ""} · storico dal ${dm(m.since)} · solo i gruppi in lista.json`;
+for (const g of m.groups) $("grp").add(new Option(g, g));
+{
+  const nNew = rows.filter(r => r.isNew && r.state !== "exp").length;
+  $("view").querySelector('option[value="new"]').textContent = `Offerte nuove (${nNew}) del ${dm(m.updated)}`;
+}
+
+// price actually paid, depending on membership and on the student discount (Coop brand, promo included)
+function pay(r, socio) {
+  const base = !r.soci || socio ? r.prezzo : r.per_tutti ?? r.prezzo_pieno ?? null;  // "Prezzi Socio" without a public price: full price applies
+  return base != null && socio && STUD() && r.coop ? Math.round(base * 80) / 100 : base;
+}
+const STUD = () => $("stud").checked;
+function unitPay(r, socio) {
+  const p = pay(r, socio);
+  if (p == null || r.prezzo_unita == null) return null;
+  return r.prezzo ? Math.round(r.prezzo_unita * p / r.prezzo * 100) / 100 : r.prezzo_unita;
+}
+
+// ---- link + lista della spesa (salvata in questo browser) ----
+const LEAFLET = id => `https://www.coopalleanza3-0.it/volantino/${id}/2560-ipercoop-lungo-savio.html`;
+const cartGet = () => store.get("coop-lista", []);
+const cartSet = v => store.set("coop-lista", v);
+const inCart = sk => cartGet().some(x => x.sk === sk);
+const r2c = v => Math.round(v * 100) / 100;
+function findEntry(sk) {
+  if (sk[0] === "o") { const r = rows.find(x => x.sk === sk); return r ? { r } : null; }
+  const x = L.find(v => v.sk === sk); return x ? { x } : null;
+}
+// what one unit costs you: paid (with membership and student discount), base (shelf price before discounts)
+function priceOf(e, socio) {
+  const stud = socio && STUD();
+  if (e.r) {
+    const r = e.r;
+    const noStud = !r.soci || socio ? r.prezzo : (r.per_tutti ?? r.prezzo_pieno ?? null);
+    const coop = stud && r.coop && noStud != null;
+    const paid = coop ? Math.round(noStud * 80) / 100 : noStud;
+    return {
+      nome: r.nome, formato: r.formato, paid, noStud, studUnit: coop ? noStud - paid : 0,
+      base: r.prezzo_pieno ?? (r.soci ? r.per_tutti : null) ?? null,
+      link: r.match ? `https://www.easycoop.com/${r.match.url_key}.html` : LEAFLET(r.volantino_id),
+      linkLabel: r.match ? "online ↗" : "volantino ↗",
+      stato: r.volantino + (r.state === "exp" ? " · SCADUTA" : ""), expired: r.state === "exp",
+    };
+  }
+  const x = e.x, coop = stud && x.coop;
+  const paid = coop ? Math.round(x.prezzo * 80) / 100 : x.prezzo;
+  return {
+    nome: x.nome, formato: x.marca, paid, noStud: x.prezzo, studUnit: coop ? x.prezzo - paid : 0, base: x.prezzo,
+    link: `https://www.easycoop.com/${x.url_key}.html`, linkLabel: "online ↗", stato: "prezzo normale online", expired: false,
+  };
+}
+function actHtml(pi, sk) {
+  const add = pi.paid != null
+    ? `<button class="add${inCart(sk) ? " on" : ""}" data-add="${esc(sk)}">${inCart(sk) ? "✓ in lista" : "+ lista"}</button>` : "";
+  return `<div class="act"><a class="lnk" href="${esc(pi.link)}" target="_blank" rel="noopener">${pi.linkLabel}</a>${add}</div>`;
+}
+function updateListaLabel() {
+  const n = cartGet().length;
+  $("view").querySelector('option[value="lista"]').textContent = `🛒 La mia lista (${n})`;
+}
+function toggleCart(sk) {
+  const list = cartGet();
+  const i = list.findIndex(x => x.sk === sk);
+  if (i >= 0) list.splice(i, 1);
+  else {
+    const e = findEntry(sk), p = e && priceOf(e, $("socio").checked);
+    if (!p || p.paid == null) return;
+    list.push({ sk, qty: 1, nome: p.nome, formato: p.formato, paid: p.paid, base: p.base });
+  }
+  cartSet(list);
+  const on = i < 0;
+  document.querySelectorAll("[data-add]").forEach(b => {
+    if (b.dataset.add === sk) { b.classList.toggle("on", on); b.textContent = on ? "✓ in lista" : "+ lista"; }
+  });
+  updateListaLabel();
+}
+function cartChange(sk, delta) {
+  const list = cartGet(), it = list.find(x => x.sk === sk);
+  if (it) it.qty = Math.min(99, Math.max(1, it.qty + delta));
+  cartSet(list);
+}
+function cartRemove(sk) { cartSet(cartGet().filter(x => x.sk !== sk)); updateListaLabel(); }
+// totals of the list. Student discount: 20% of Coop-brand spend, capped at 20 € (100 € of spend) per month
+function cartTotals(socio) {
+  const lines = cartGet().map(it => {
+    const e = findEntry(it.sk);
+    const p = e ? priceOf(e, socio) : { nome: it.nome, formato: it.formato, paid: it.paid, base: it.base, studUnit: 0,
+      link: "", linkLabel: "", stato: "non più disponibile", expired: true };
+    return {
+      sk: it.sk, qty: it.qty, nome: p.nome, formato: p.formato, stato: p.stato, expired: p.expired,
+      link: p.link, linkLabel: p.linkLabel, unit: p.paid,
+      linePaid: r2c(it.qty * p.paid), lineBase: p.base != null ? r2c(it.qty * p.base) : null, studLine: it.qty * p.studUnit,
+    };
+  });
+  const paidRaw = lines.reduce((s, l) => s + l.linePaid, 0);
+  const studRaw = lines.reduce((s, l) => s + l.studLine, 0);
+  const base = lines.reduce((s, l) => s + (l.lineBase ?? l.linePaid), 0);
+  const studApplied = Math.min(studRaw, 20);
+  const final = paidRaw + studRaw - studApplied;
+  return {
+    lines, base: r2c(base), final: r2c(final), studApplied: r2c(studApplied), studRaw: r2c(studRaw),
+    saving: r2c(base - final), offers: r2c(base - (paidRaw + studRaw)),
+  };
+}
+function renderLista(socio) {
+  const T = cartTotals(socio);
+  if (!T.lines.length) {
+    $("main").innerHTML = `<div class="empty">La lista è vuota. Su un prodotto premi “+ lista” per aggiungerlo.</div>`;
+    return;
+  }
+  const items = T.lines.map(l => `<div class="item${l.expired ? " expired" : ""}">
+      <div>
+        <div class="name">${esc(titleCase(l.nome))}</div>
+        <div class="meta">${esc(l.formato)}${l.formato ? " · " : ""}${esc(l.stato)}</div>
+        <div class="act">${l.link ? `<a class="lnk" href="${esc(l.link)}" target="_blank" rel="noopener">${l.linkLabel}</a>` : ""}</div>
+      </div>
+      <div class="prices">
+        <div class="qty"><button data-sk="${esc(l.sk)}" data-qty="-1">−</button><b>${l.qty}</b><button data-sk="${esc(l.sk)}" data-qty="1">+</button></div>
+        <div class="price">${eur(l.linePaid)}</div>
+        ${l.lineBase != null && l.lineBase > l.linePaid + 0.005 ? `<div class="old">${eur(l.lineBase)}</div>` : ""}
+        <div class="meta">${eur(l.unit)} l'uno · <button class="rm" data-rm="${esc(l.sk)}">togli</button></div>
+      </div>
+    </div>`).join("");
+  const pct = T.base ? Math.round(T.saving / T.base * 100) : 0;
+  const sum = `<div class="sum">
+      <div><span>Prezzo di scaffale</span><b>${eur(T.base)}</b></div>
+      <div><span>Offerte e prezzi scontati</span><b class="${T.offers >= 0 ? "good" : ""}">${T.offers >= 0 ? "−" : "+"}${eur(Math.abs(T.offers))}</b></div>
+      ${T.studApplied > 0 ? `<div><span>Sconto studenti −20% (tetto 20 € al mese)</span><b class="good">−${eur(T.studApplied)}</b></div>` : ""}
+      <div class="tot"><span>Da pagare</span><b>${eur(T.final)}</b></div>
+      <div class="meta">Risparmio ${eur(T.saving)} (${pct}%) rispetto al prezzo di scaffale.${T.studRaw > 20 ? ` Lo sconto studenti su questa lista sarebbe ${eur(T.studRaw)}, tagliato al tetto di 20 €.` : ""}</div>
+      <div class="meta">Il prezzo di scaffale è quello normale di Cesena o, se manca, quello online. Il tetto studenti vale per tutta la spesa del mese (100 € di spesa): se hai già speso in parte, il margine è minore.</div>
+      <div style="margin-top:8px"><button id="svuota">svuota lista</button></div>
+    </div>`;
+  $("main").innerHTML = `<div class="count">${T.lines.length} articoli</div><div class="list">${items}</div>${sum}`;
+}
+
+function itemHtml(r, socio) {
+  const p = pay(r, socio), u = unitPay(r, socio);
+  const full = r.soci && !socio ? null : r.prezzo_pieno;
+  const past = r.storia.filter(h => h[1] != null);
+  const minPast = past.length ? Math.min(...past.map(h => h[1])) : null;
+  let badges = [
+    r.isNew && r.state !== "exp" ? `<span class="badge b-new">NUOVA</span>` : "",
+    r.state === "soon" ? `<span class="badge b-soon">dal ${dm(r.valido_da)}</span>` : "",
+    r.state === "now" ? `<span class="badge b-off">fino al ${dm(r.valido_a)}</span>` : "",
+    r.state === "exp" ? `<span class="badge b-exp">scaduta ${dm(r.valido_a)}</span>` : "",
+    r.sconto && (!r.soci || socio) ? `<span class="badge b-off">−${r.sconto}%</span>` : "",
+    r.soci ? `<span class="badge b-soci">${socio ? "prezzo soci" : "sconto solo soci"}</span>` : "",
+    r.coop && socio && STUD() ? `<span class="badge b-best">−20% studenti incluso</span>` : "",
+    minPast != null && r.prezzo != null && r.prezzo <= minPast ? `<span class="badge b-best">miglior prezzo visto</span>` : "",
+  ].join("");
+  const history = past.length
+    ? `<div class="meta">Già in offerta: ${past.map(h => `${dm(h[0])} a ${eur(h[1])}`).join(" · ")}</div>` : "";
+  const validity = r.validita ? ` · ${esc(r.validita)}` : "";
+  // regular price: from the leaflet when it states one (Cesena), else the same EAN online
+  const shelf = r.prezzo_pieno ?? (r.soci ? r.per_tutti : null);
+  const normal = shelf != null ? { v: r.coop && studOn(socio) ? Math.round(shelf * 80) / 100 : shelf, src: "Cesena" }
+    : r.match ? { v: lp(r.match, socio), src: "online" } : null;
+  const save = normal && p != null && normal.v > p ? Math.round((1 - p / normal.v) * 100) : null;
+  const alt = r.state !== "exp" && u != null ? bestAlternative(r, socio) : null;
+  const altU = alt ? lu(alt, socio) : null;
+  let refs = normal ? `<div class="ref">Prezzo normale <b>${eur(normal.v)}</b> (${normal.src})${save ? ` · risparmi ${save}%` : ""}</div>` : "";
+  if (alt && altU < u * 0.98) {
+    refs += `<div class="ref">Alternativa più economica a prezzo normale: <b>${esc(titleCase(alt.nome))}</b> ${eur(altU)}/${unitLabel(alt.uk)}${alt.coop && studOn(socio) ? " (con −20%)" : ""}</div>`;
+  } else if (alt) {
+    badges += `<span class="badge b-best">più conveniente del suo tipo</span>`;
+  }
+  return `<div class="item${r.state === "exp" ? " expired" : ""}" data-id="${r.id}">
+    ${r.img ? `<img loading="lazy" src="${esc(r.img)}" alt="">` : "<span></span>"}
+    <div>
+      <div class="name">${esc(titleCase(r.nome))}</div>
+      <div class="meta">${esc(r.formato)}${r.formato ? " · " : ""}${esc(r.volantino)}${validity}</div>
+      ${qualityHtml(r.q)}${badges}${refs}${history}
+      ${actHtml(priceOf({ r }, socio), r.sk)}
+    </div>
+    <div class="prices">
+      <div>${full ? `<span class="old">${eur(full)}</span>` : ""}<span class="price">${p != null ? eur(p) : (r.sconto ? "−" + r.sconto + "%" : "")}</span></div>
+      ${u != null ? `<div class="meta">${eur(u)} al ${esc(r.unita)}</div>` : ""}
+      ${r.soci && socio && r.per_tutti ? `<div class="meta">per tutti ${eur(r.per_tutti)}</div>` : ""}
+    </div>
+  </div>`;
+}
+
+function listinoHtml(x, socio) {
+  const u = lu(x, socio);
+  return `<div class="item" data-id="${x.id}">
+    ${x.img ? `<img loading="lazy" src="${esc(x.img)}" alt="">` : "<span></span>"}
+    <div>
+      <div class="name"><a href="https://www.easycoop.com/${esc(x.url_key)}.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${esc(x.nome)}</a></div>
+      <div class="meta">${esc(x.marca)} · prezzo normale online</div>
+      ${qualityHtml(x.q)}
+      ${x.coop && studOn(socio) ? `<span class="badge b-best">−20% studenti incluso</span>` : ""}
+      ${actHtml(priceOf({ x }, socio), x.sk)}
+    </div>
+    <div class="prices">
+      <div class="price">${eur(lp(x, socio))}</div>
+      ${u != null ? `<div class="meta">${eur(u)} al ${unitLabel(x.uk)}</div>` : ""}
+    </div>
+  </div>`;
+}
+
+// every product of the groups: the online catalogue, with the Cesena offer in place of the
+// regular price when there is one, plus the Cesena offers that have no online counterpart
+function renderAll(socio, words, grp, sort) {
+  const live = rows.filter(r => r.state !== "exp");
+  const offerOf = new Map();
+  for (const r of live) if (r.match && (!offerOf.has(r.match) || r.state === "now")) offerOf.set(r.match, r);
+  const entries = [
+    ...L.map(x => offerOf.has(x) ? { r: offerOf.get(x), g: x.gruppo, key: x.key } : { x, g: x.gruppo, key: x.key }),
+    ...live.filter(r => !r.match).map(r => ({ r, g: r.gruppo, key: r.key })),
+  ].filter(e => (!grp || e.g === grp) && (!$("onlyOff").checked || e.r) && words.every(w => e.key.includes(w))
+           && healthOk(e.r ? e.r.q : e.x.q));
+  const unit = e => e.r ? unitPay(e.r, socio) : lu(e.x, socio);
+  const val = e => e.r ? (sort === "p" ? pay(e.r, socio) : sort === "d" ? -(e.r.sconto || 0) : unitPay(e.r, socio))
+                       : (sort === "p" ? lp(e.x, socio) : sort === "d" ? 0 : lu(e.x, socio));
+  const cmp = (x, y) => x == null ? 1 : y == null ? -1 : x - y;
+  entries.sort((a, b) => sort === "h"
+    ? nsRank(a.r ? a.r.q : a.x.q) - nsRank(b.r ? b.r.q : b.x.q) || cmp(unit(a), unit(b))
+    : cmp(val(a), val(b)));
+  const nOff = entries.filter(e => e.r).length;
+  const sections = m.groups.map(g => [g, entries.filter(e => e.g === g)]).filter(([, l]) => l.length);
+  $("main").innerHTML = `<div class="count">${entries.length} prodotti, ${nOff} in offerta a Cesena · prezzi normali dal listino online easycoop.com rilevato il ${m.listino ? dm(m.listino) : "–"}, si aggiorna ogni settimana (a Cesena di solito uguali o più bassi)</div>` +
+    (sections.length ? sections.map(([g, l]) =>
+      `<h2>${esc(g)} <small>${l.length}</small></h2><div class="list">${l.map(e => e.r ? itemHtml(e.r, socio) : listinoHtml(e.x, socio)).join("")}</div>`).join("")
+      : `<div class="empty">Nessun prodotto.</div>`);
+}
+
+function render() {
+  const socio = $("socio").checked;
+  store.set("coop-socio", socio);
+  store.set("coop-stud", STUD());
+  const words = norm($("q").value).split(/\s+/).filter(Boolean);
+  const view = $("view").value, allView = view === "all", isList = view === "lista";
+  for (const id of ["q", "grp", "sort", "health"]) $(id).style.display = isList ? "none" : "";
+  $("state").style.display = isList || allView ? "none" : "";
+  $("onlyOffLbl").style.display = allView ? "" : "none";
+  updateListaLabel();
+  if (isList) return renderLista(socio);
+  if (allView) return renderAll(socio, words, $("grp").value, $("sort").value);
+  const grp = $("grp").value, state = $("state").value, sort = $("sort").value;
+  const list = rows.filter(r =>
+    (!grp || r.gruppo === grp) &&
+    ($("view").value !== "new" || (r.isNew && r.state !== "exp")) &&
+    (state === "all" || (state === "now" ? r.state === "now" : r.state !== "exp")) &&
+    words.every(w => r.key.includes(w)) && healthOk(r.q));
+  const val = r => sort === "h" ? nsRank(r.q) * 1000 + (unitPay(r, socio) ?? 999) : sort === "u" ? unitPay(r, socio) : sort === "p" ? pay(r, socio) : sort === "d" ? -(r.sconto || 0) : r.valido_a;
+  list.sort((a, b) => {
+    const x = val(a), y = val(b);
+    if (x == null) return 1; if (y == null) return -1;
+    return (x < y ? -1 : x > y ? 1 : 0) || (a.state === "exp") - (b.state === "exp");
+  });
+  if (!list.length) {
+    $("main").innerHTML = `<div class="count">0 offerte</div><div class="empty">Nessuna offerta adesso per questi filtri.</div>`;
+    return;
+  }
+  const sections = m.groups.map(g => [g, list.filter(r => r.gruppo === g)]).filter(([, l]) => l.length);
+  $("main").innerHTML = `<div class="count">${list.length} offerte</div>` + sections.map(([g, l]) =>
+    `<h2>${esc(g)} <small>${l.length}</small></h2><div class="list">${l.map(r => itemHtml(r, socio)).join("")}</div>`).join("");
+}
+
+
+// ---- price history of one product: regular price over time + Cesena offer periods ----
+const DAY = 864e5;
+const ms = d => Date.parse(d + "T00:00:00");
+const r2 = v => Math.round(v * 100) / 100;
+
+function timeline(id, socio) {
+  let x, offers;
+  if (id[0] === "l") {
+    x = L[+id.slice(1)];
+    offers = rows.filter(r => r.match === x);
+  } else {
+    const r = rows[+id.slice(1)];
+    x = r.match;
+    const k = norm(r.nome + " " + r.formato);
+    offers = x ? rows.filter(o => o.match === x) : rows.filter(o => !o.match && norm(o.nome + " " + o.formato) === k);
+  }
+  const f = x && x.coop && studOn(socio) ? 0.8 : 1;
+  const normal = x ? x.storico.map(([d, v]) => [d, r2(v * f)]) : [];
+  const shelf = offers.map(o => {
+    const v = o.prezzo_pieno ?? (o.soci ? o.per_tutti : null);
+    return v == null ? null : [o.valido_da, o.coop && studOn(socio) ? r2(v * 0.8) : v];
+  }).filter(Boolean);
+  const seen = new Set();
+  const offs = offers.map(o => ({ da: o.valido_da, a: o.valido_a, v: pay(o, socio), vol: o.volantino }))
+    .filter(o => o.v != null && !seen.has(o.da + o.a + o.v) && seen.add(o.da + o.a + o.v))
+    .sort((a, b) => a.da < b.da ? -1 : 1);
+  return { x, normal, shelf, offs };
+}
+
+function chartSvg(t) {
+  // one line = price paid at Cesena day by day: regular price (Cesena if the leaflet states it,
+  // else online), replaced by the offer price on offer days; dashed after today
+  const W = 640, H = 170, padL = 46, padR = 12, padT = 16, padB = 24;
+  const lastOff = t.offs.length ? Math.max(...t.offs.map(o => ms(o.a))) : ms(TODAY);
+  const x0 = ms(m.since);
+  let x1 = Math.max(ms(TODAY), lastOff);
+  if (x1 - x0 < 14 * DAY) x1 = x0 + 14 * DAY;
+  // regular price on a given day
+  const shelf = [...t.shelf].sort((a, b) => a[0] < b[0] ? -1 : 1);
+  const regular = d => {
+    if (shelf.length) return (shelf.filter(p => p[0] <= d).pop() || shelf[0])[1];
+    if (t.normal.length) return (t.normal.filter(p => p[0] <= d).pop() || t.normal[0])[1];
+    return null;
+  };
+  const days = [];
+  for (let d = x0; d <= x1; d += DAY) {
+    const iso = new Date(d).toISOString().slice(0, 10);
+    const off = t.offs.filter(o => o.da <= iso && iso <= o.a).map(o => o.v);
+    const v = off.length ? Math.min(...off) : regular(iso);
+    days.push({ d, v, off: off.length > 0, fut: iso > TODAY });
+  }
+  const vals = days.map(p => p.v).filter(v => v != null);
+  if (!vals.length) return "";
+  let y0 = Math.min(...vals), y1 = Math.max(...vals);
+  const pad = Math.max((y1 - y0) * 0.2, y1 * 0.06, 0.05);
+  y0 = Math.max(0, y0 - pad); y1 += pad;
+  const X = t_ => padL + (t_ - x0) / (x1 - x0) * (W - padL - padR);
+  const Y = v => padT + (1 - (v - y0) / (y1 - y0)) * (H - padT - padB);
+  let g = "";
+  for (const v of [y0 + (y1 - y0) * 0.15, (y0 + y1) / 2, y1 - (y1 - y0) * 0.15]) {
+    g += `<line x1="${padL}" x2="${W - padR}" y1="${Y(v)}" y2="${Y(v)}" style="stroke:var(--line)"/>`;
+    g += `<text x="${padL - 6}" y="${Y(v) + 4}" text-anchor="end" style="fill:var(--muted);font-size:11px">${eur(v)}</text>`;
+  }
+  // group consecutive days with the same price/state into segments, joined by vertical steps
+  const segs = [];
+  for (const p of days) {
+    if (p.v == null) continue;
+    const s_ = segs[segs.length - 1];
+    if (s_ && s_.v === p.v && s_.off === p.off && s_.fut === p.fut && s_.end === p.d - DAY) s_.end = p.d;
+    else segs.push({ start: p.d, end: p.d, v: p.v, off: p.off, fut: p.fut });
+  }
+  segs.forEach((s_, i) => {
+    const a = X(s_.start), b = X(s_.end + DAY);
+    const color = s_.off ? "var(--accent)" : "var(--muted)";
+    const dash = s_.fut ? "stroke-dasharray:5 4;" : "";
+    g += `<line x1="${a}" x2="${b}" y1="${Y(s_.v)}" y2="${Y(s_.v)}" style="stroke:${color};stroke-width:${s_.off ? 4 : 2.5};${dash}stroke-linecap:round"><title>${s_.off ? "In offerta" : "Prezzo normale"} ${eur(s_.v)}</title></line>`;
+    const next = segs[i + 1];
+    if (next && next.start === s_.end + DAY && next.v !== s_.v)
+      g += `<line x1="${b}" x2="${b}" y1="${Y(s_.v)}" y2="${Y(next.v)}" style="stroke:var(--muted);stroke-width:1.5;${next.fut ? "stroke-dasharray:3 3;" : ""}"/>`;
+    // label each price level once per segment, when there is room
+    const prev = segs[i - 1];
+    if ((b - a > 34 || i === 0) && !(prev && prev.v === s_.v && prev.off === s_.off))
+      g += `<text x="${Math.min(a + 2, W - padR - 40)}" y="${Y(s_.v) - 6}" style="fill:${color};font-size:11px;font-weight:600">${eur(s_.v)}</text>`;
+  });
+  const tx = X(ms(TODAY) + DAY / 2);
+  g += `<line x1="${tx}" x2="${tx}" y1="${padT - 6}" y2="${H - padB}" style="stroke:var(--ink);stroke-opacity:.35;stroke-dasharray:2 3"/>`;
+  g += `<text x="${tx}" y="${H - 8}" text-anchor="middle" style="fill:var(--ink);font-size:11px">oggi</text>`;
+  const fmt = t_ => new Date(t_).toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit" });
+  if (tx - padL > 45) g += `<text x="${padL}" y="${H - 8}" style="fill:var(--muted);font-size:11px">${fmt(x0)}</text>`;
+  if (W - padR - tx > 45) g += `<text x="${W - padR}" y="${H - 8}" text-anchor="end" style="fill:var(--muted);font-size:11px">${fmt(x1)}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Andamento prezzo">${g}</svg>`;
+}
+
+function statsHtml(t, currentId, socio) {
+  const start = m.since, days = Math.max(1, Math.round((ms(TODAY) - ms(start)) / DAY) + 1);
+  const past = t.offs.filter(o => o.da <= TODAY);
+  const onDays = past.reduce((n, o) => n + Math.max(0, Math.round((Math.min(ms(o.a), ms(TODAY)) - Math.max(ms(o.da), ms(start))) / DAY) + 1), 0);
+  const prices = t.offs.map(o => o.v);
+  const lines = [];
+  const shelfSorted = [...t.shelf].sort((a, b) => a[0] < b[0] ? -1 : 1);
+  const onlineNow = t.normal.length ? t.normal[t.normal.length - 1][1] : null;
+  if (shelfSorted.length) {
+    const cur = shelfSorted[shelfSorted.length - 1][1], first = shelfSorted[0][1];
+    lines.push(`Prezzo normale a Cesena: <b>${eur(cur)}</b>` +
+      (first !== cur ? ` (era ${eur(first)} il ${dm(shelfSorted[0][0])})` : "") +
+      (onlineNow != null ? ` · online ${eur(onlineNow)}` : ""));
+  } else if (onlineNow != null) {
+    const first = t.normal[0][1];
+    lines.push(`Prezzo normale (stima online): <b>${eur(onlineNow)}</b>` +
+      (first !== onlineNow ? ` (era ${eur(first)} il ${dm(t.normal[0][0])})` : ""));
+  }
+  if (prices.length) {
+    const min = Math.min(...prices), avg = r2(prices.reduce((a, b) => a + b, 0) / prices.length);
+    lines.push(`In offerta <b>${t.offs.length} ${t.offs.length === 1 ? "volta" : "volte"}</b> · prezzo d'offerta minimo <b>${eur(min)}</b>, medio ${eur(avg)}`);
+    lines.push(`Giorni in offerta: ${Math.min(onDays, days)} su ${days} osservati (${Math.round(Math.min(onDays, days) / days * 100)}%)`);
+    const cur = currentId && currentId[0] === "o" ? rows[+currentId.slice(1)] : null;
+    const cv = cur ? pay(cur, socio) : null;
+    if (cv != null && prices.length > 1) {
+      lines.push(cv <= min ? `👍 <b>Questa è l'offerta più bassa vista finora.</b>`
+        : cv <= avg ? `Questa offerta è sotto la media delle offerte viste.`
+        : `Questa offerta è sopra la media: in passato era più bassa (${eur(min)}).`);
+    }
+  } else {
+    lines.push("Mai visto in offerta a Cesena da quando seguo i volantini.");
+  }
+  if (days < 30) lines.push(`<span class="meta">Storico iniziato il ${dm(start)}: più giorni passano, più questi numeri diventano affidabili.</span>`);
+  return `<div class="stats">${lines.join("<br>")}</div>`;
+}
+
+function detailHtml(id) {
+  const socio = $("socio").checked, t = timeline(id, socio);
+  const svg = chartSvg(t);
+  return `<div class="detail" data-for="${id}">
+    ${svg || ""}
+    ${svg ? `<div class="legend"><span><i style="background:var(--muted)"></i>prezzo normale${t.shelf.length ? " (Cesena)" : t.normal.length ? " (stima online)" : ""}</span><span><i style="background:var(--accent);height:4px"></i>in offerta a Cesena</span><span>tratteggio = giorni futuri (validità volantino)</span></div>` : ""}
+    ${statsHtml(t, id, socio)}
+  </div>`;
+}
+
+$("main").addEventListener("click", e => {
+  const add = e.target.closest("[data-add]");
+  if (add) return toggleCart(add.dataset.add);
+  const qb = e.target.closest("[data-qty]");
+  if (qb) { cartChange(qb.dataset.sk, +qb.dataset.qty); return render(); }
+  const rm = e.target.closest("[data-rm]");
+  if (rm) { cartRemove(rm.dataset.rm); return render(); }
+  if (e.target.closest("#svuota")) { if (confirm("Svuotare la lista?")) { cartSet([]); render(); } return; }
+  if (e.target.closest("a")) return;
+  const item = e.target.closest(".item[data-id]");
+  if (!item) return;
+  const next = item.nextElementSibling;
+  if (next && next.classList.contains("detail")) { next.remove(); return; }
+  item.insertAdjacentHTML("afterend", detailHtml(item.dataset.id));
+});
+
+let t;
+$("q").addEventListener("input", () => { clearTimeout(t); t = setTimeout(render, 150); });
+["view", "grp", "state", "sort", "socio", "stud", "onlyOff", "health"].forEach(id => $(id).addEventListener("change", render));
+render();
+</script>
+</body>
+</html>

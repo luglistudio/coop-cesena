@@ -1,0 +1,235 @@
+{
+  "_info": "Gruppi di prodotti da cercare nei volantini dell'Ipercoop Cesena Lungo Savio (negozio 0315). categorie_volantino: categorie del volantino considerate (1 Dispensa, 2 Bevande, 3 Freschi, 4 Freschissimi), sovrascrivibile per gruppo. cerca/escludi = regex sul testo dell'offerta (nome, formato, marca; maiuscole ignorate). Un'offerta finisce nel primo gruppo che la accetta. stagione=true filtra in piu' con il calendario sotto, in base al mese corrente. easycoop = listino online di riferimento per confrontare le offerte: categorie = id categoria easycoop, includi/escludi = regex sul nome; il filtro stagione vale anche qui. alimentare=false: gruppo non alimentare, niente Nutri-Score.",
+  "negozio": "0315",
+  "categorie_volantino": [
+    "1",
+    "2",
+    "3",
+    "4"
+  ],
+  "gruppi": [
+    {
+      "nome": "Pesti e sughi",
+      "cerca": "pesto|pesti\\b|\\bsugo|\\bsughi|condimento per pasta",
+      "escludi": "rag[uù]|pomodor|passata|polpa|pelati|datterin|ciliegin|arrabbiat|amatrician|puttanesc|bolognes|norma\\b|vongol|scoglio|tonno|condoro|olive",
+      "easycoop": {
+        "categorie": [
+          19026,
+          19276
+        ],
+        "includi": "pesto|sugo|crema al tartufo",
+        "escludi": "rag[uù]|pomodor|salsa pronta|sugo (pronto )?al basilico|datterin|ciliegin|arrabbiat|amatrician|puttanesc|bolognes|norma|olive|tonno|vongol|scoglio|astice|lardo"
+      }
+    },
+    {
+      "nome": "Pollo e tacchino a fette",
+      "cerca": "^(?=.*(tacchino|pollo))(?=.*(fett|veline|arrost|al forno|scaloppe))",
+      "escludi": "w[uü]rstel|mortadella|\\bveg|vegetal|vegan|soia|liveg",
+      "easycoop": {
+        "categorie": [
+          19301,
+          18873
+        ],
+        "includi": "^(?=.*(tacchino|pollo))(?=.*(fett|veline|arrost|al forno|aequilibrium|snello|sofficette|scaloppe))",
+        "escludi": "w[uü]rstel|wudy|w[uü]ber|mortadella|\\bveg|vegetal|vegan|soia|liveg"
+      }
+    },
+    {
+      "nome": "Carne per friggitrice ad aria",
+      "cerca": "hamburger|burger|cotolett|nugget|cordon|polpett|alette|ali di pollo|sovracosc|fusi di pollo|cosce di pollo|spiedin|salsicc|bocconcini di pollo|petto di pollo|chicken|crocchette di pollo|straccetti|arrosticin",
+      "escludi": "pesce|platessa|merluzzo|salmone|vegetal|\\bveg|tonno|soia|ceci|legumi|pane|panini",
+      "easycoop": {
+        "categorie": [
+          18870,
+          18877,
+          18873,
+          19314
+        ],
+        "escludi": "carne secca|carne salada|tartare|ascolana|gallina|faraona|cappone|busto|stuzzichini|marinatura|marinata|coniglio|equino|galletto"
+      }
+    },
+    {
+      "nome": "Pasta",
+      "cerca": "\\bpasta\\b|spaghett|penne|fusilli|rigatoni|linguine|tortiglioni|maccheroni|paccheri|orecchiette|farfalle|mezze maniche|casarecce|bavette|vermicelli|sedanini|trofie",
+      "escludi": "fresca|all.uovo|ripien|tortell|raviol|gnocch|sfoglia|pizza|frolla|dentifric|bris[eè]|madre|lievit|piatti pronti|fresch|acciugh|preparato",
+      "easycoop": {
+        "categorie": [
+          19114,
+          19119
+        ]
+      }
+    },
+    {
+      "nome": "Acqua",
+      "cerca": "\\bacqua\\b",
+      "escludi": "tonica|aromatizz|ossigenat|demineralizz|distillat|micellar|profum|termal|colonia|ragia|di rose|spray|struccant|viso",
+      "easycoop": {
+        "categorie": [
+          18816,
+          18815
+        ]
+      }
+    },
+    {
+      "nome": "Piadine",
+      "cerca": "piadin|\\bpiada",
+      "easycoop": {
+        "categorie": [
+          19264
+        ],
+        "includi": "piad"
+      }
+    },
+    {
+      "nome": "Parmigiano Reggiano",
+      "cerca": "parmigiano reggiano|parmareggio",
+      "easycoop": {
+        "categorie": [
+          19295,
+          19299
+        ],
+        "includi": "parmigiano reggiano|parmareggio"
+      }
+    },
+    {
+      "nome": "Actimel e proteici",
+      "cerca": "actimel|protei|hipro|hi-pro|skyr|high protein|kefir|yopro",
+      "escludi": "tramezzin",
+      "easycoop": {
+        "categorie": [
+          19228,
+          18985
+        ],
+        "includi": "actimel|protei|hipro|skyr|high protein|\\bpro\\b|kefir|barrett",
+        "escludi": "chips|mozzarella|spaghetti|pasta"
+      }
+    },
+    {
+      "nome": "Crostini e pane",
+      "cerca": "crostini|bruschett|\\bpane\\b|pan ?carr[eè]|pan bauletto|\\bpanini\\b|filone|ciabatt|baguette|pagnott|piadelle",
+      "escludi": "grattugiat|panettone|pan di spagna|pan di stelle",
+      "easycoop": {
+        "categorie": [
+          19249,
+          19253,
+          23140
+        ],
+        "escludi": "tuc|tocchetti|dolci al latte|pomodoro"
+      }
+    },
+    {
+      "nome": "Biscotti sani",
+      "cerca": "^(?=.*(biscott|frollin|galbusera|gran cereale|misura))(?=.*(galbusera|gran cereale|misura|integral|avena|senza zuccher|farro|saraceno|digestive|cereali|buoni ?cos[iì]|riso su riso))",
+      "escludi": "farcit|crema|gianduia|ricopert",
+      "easycoop": {
+        "categorie": [
+          19054
+        ],
+        "includi": "galbusera|gran cereale|misura|integral|avena|senza zuccheri|farro|saraceno|digestive|cereali",
+        "escludi": "farcit|crema|gianduia|golosi"
+      }
+    },
+    {
+      "nome": "Extra per stare in forma",
+      "cerca": "\\buova\\b|tonno.*natural|natural.*tonno|\\bceci\\b|fagiol|lenticch|edamame|fiocchi d.avena|yogurt greco",
+      "escludi": "cioccolat|croccant|granola|pasqua|uova di",
+      "easycoop": {
+        "categorie": [
+          19223,
+          19033,
+          19049,
+          19071,
+          19230
+        ],
+        "includi": "uova|tonno.*natural|natural.*tonno|\\bceci\\b|fagiol|lenticch|edamame|fiocchi d.avena|avena|greco.*(0|magro)|(0|magro).*greco",
+        "escludi": "cioccolat|crunchy|croccante|granola|miele"
+      }
+    },
+    {
+      "nome": "Olio",
+      "cerca": "\\bolio (extra ?vergine|di oliva|d.oliva|di semi|di girasole|di arachide|evo)|\\bolio evo",
+      "escludi": "tonno|sott.?olio|all.olio|in olio|carciof|filetti|peperon|pomodor|funghi|melanzan|acciugh|sgombro|sardin|olive|grissin|grissogh|cracker|tarall|frisell|focacc|patatin|chips|biscott",
+      "categorie_volantino": [
+        "1"
+      ],
+      "easycoop": {
+        "categorie": [
+          19019,
+          19017,
+          19018
+        ]
+      }
+    },
+    {
+      "nome": "Frutta e verdura di stagione",
+      "cerca": ".",
+      "escludi": "succ|spremut|confettur|marmellat|secch|disidrat|sciropp|surgel|chips|crema|nettar|yogurt|conserv|sott.?olio|grigliat|pur[eèé]|torta|raviol|tortell|cott|biscott|essiccat|candit|zuppa|minestr|vellutat|integrator|tisan|infus|semi\\b|farina",
+      "categorie_volantino": [
+        "4"
+      ],
+      "stagione": true,
+      "easycoop": {
+        "categorie": [
+          19161,
+          19180
+        ],
+        "escludi": "erba cipollina|fiori di zucca|secch"
+      }
+    },
+    {
+      "nome": "Igiene casa",
+      "cerca": "sacch|spugn|\\bpann[oi]\\b|detersiv|detergent|sgrassator|anticalcare|candeggin|igienizzant|multiuso|pavimenti|bagno|\\bwc\\b|piatti|bucato|lavatrice|vetri",
+      "escludi": "lavastoviglie|brillantante|gelo|freezer|congel|alimenti|bagnoschiuma|bagnodoccia|doccia|intim|pattumier|stendibiancheria|asciugamani|accappatoi",
+      "categorie_volantino": [
+        "8"
+      ],
+      "alimentare": false,
+      "easycoop": {
+        "categorie": [
+          18901,
+          18921,
+          18899,
+          18895,
+          18911,
+          18910,
+          18912,
+          18903,
+          18900,
+          18897
+        ],
+        "escludi": "lavastoviglie|gelo|freezer|congel|alimenti"
+      }
+    },
+    {
+      "nome": "Igiene orale",
+      "cerca": "dentifric|spazzolin|collutori|filo interdentale",
+      "escludi": "elettric|testin|ricambi|bambin|kids|junior|baby|crescendo|mesi",
+      "categorie_volantino": [
+        "6"
+      ],
+      "alimentare": false,
+      "easycoop": {
+        "categorie": [
+          18940,
+          18943,
+          18939
+        ],
+        "escludi": "elettric|testin|ricambi|bambin|kids|junior|baby|crescendo|mesi"
+      }
+    }
+  ],
+  "stagione": {
+    "1": "arance|mandarin|clementin|kiwi|\\bmel[ae]\\b|\\bper[ae]\\b|pompelm|limon|broccol|cavolfior|cavol|verza|finocch|carciof|spinac|radicch|porr[io]\\b|carot|bietol|cicori|zucca\\b|patate|cipoll",
+    "2": "arance|mandarin|clementin|kiwi|\\bmel[ae]\\b|\\bper[ae]\\b|pompelm|limon|broccol|cavolfior|cavol|verza|finocch|carciof|spinac|radicch|porr[io]\\b|carot|bietol|cicori|patate|cipoll",
+    "3": "arance|kiwi|\\bmel[ae]\\b|\\bper[ae]\\b|limon|pompelm|carciof|asparag|spinac|finocch|cavolfior|broccol|radicch|carot|porr[io]\\b|bietol|lattug|patate|cipoll",
+    "4": "\\bmel[ae]\\b|kiwi|arance|fragol|limon|asparag|carciof|piselli|fave\\b|spinac|lattug|rucol|carot|ravanell|bietol|patate|cipoll",
+    "5": "fragol|ciliegi|nespol|\\bmel[ae]\\b|limon|asparag|piselli|fave\\b|zucchin|lattug|rucol|carot|ravanell|fagiolin|patate|cipoll",
+    "6": "ciliegi|albicocc|fragol|pesche|nettarin|nespol|melon|cocomer|anguri|zucchin|pomodor|fagiolin|cetriol|peperon|melanzan|lattug|carot|patate|cipoll",
+    "7": "pesche|nettarin|albicocc|melon|cocomer|anguri|prugn|susin|mirtill|lampon|zucchin|pomodor|melanzan|peperon|cetriol|fagiolin|lattug|carot|patate|cipoll",
+    "8": "pesche|nettarin|melon|cocomer|anguri|prugn|susin|fichi|\\bmore\\b|uva\\b|zucchin|pomodor|melanzan|peperon|friggitell|cetriol|fagiolin|lattug|carot|patate|cipoll",
+    "9": "uva\\b|fichi|\\bper[ae]\\b|\\bmel[ae]\\b|prugn|susin|pesche|melograno|pomodor|peperon|friggitell|melanzan|zucchin|zucca\\b|funghi|fagiolin|broccol|carot|patate|cipoll",
+    "10": "uva\\b|\\bmel[ae]\\b|\\bper[ae]\\b|cachi|kaki|melograno|kiwi|castagn|fichi|susin|zucca\\b|funghi|broccol|cavolfior|cavol|verza|finocch|spinac|bietol|radicch|porr[io]\\b|carot|sedano|patate|cipoll|cicori|lattug|scarola|indivia",
+    "11": "\\bmel[ae]\\b|\\bper[ae]\\b|cachi|kaki|kiwi|clementin|mandarin|arance|melograno|castagn|zucca\\b|broccol|cavolfior|cavol|verza|finocch|spinac|radicch|porr[io]\\b|carot|cicori|carciof|patate|cipoll|sedano",
+    "12": "arance|mandarin|clementin|kiwi|\\bmel[ae]\\b|\\bper[ae]\\b|cachi|kaki|limon|pompelm|broccol|cavolfior|cavol|verza|finocch|carciof|spinac|radicch|porr[io]\\b|carot|cicori|zucca\\b|patate|cipoll"
+  }
+}
